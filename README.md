@@ -1,4 +1,4 @@
-# true
+# DropWizard study
 
 How to start the true application
 ---
