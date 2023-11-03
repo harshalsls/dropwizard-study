@@ -5,9 +5,9 @@ logging:
     org.example: DEBUG
 database:
   driverClass: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://localhost/dropwizard_blog
-  user: dropwizard_blog
-  password: dropwizard_blog
+  url: jdbc:mysql://localhost:3306/test
+  user: test
+  password: test
   maxWaitForConnection: 1s
   validationQuery: "SELECT 1"
   validationQueryTimeout: 3s
