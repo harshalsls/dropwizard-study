@@ -8,6 +8,7 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
+import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import org.example.auth.DropWizardAuthorizer;
 import org.example.auth.DropWizardAuthenticator;
@@ -16,10 +17,13 @@ import org.example.core.Employee;
 import org.example.core.User;
 import org.example.db.EmployeeDAO;
 import org.example.db.UserDAO;
+import org.example.db.jdbi.EmployeeJDBIDAO;
+import org.example.db.jdbi.UserJDBIDAO;
 import org.example.resources.EmployeeResource;
 import org.example.resources.HelloWorldResource;
 import org.example.resources.UserResource;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
+import org.jdbi.v3.core.Jdbi;
 
 public class DropwizardApplication extends Application<DropwizardConfiguration> {
 
@@ -65,18 +69,22 @@ public class DropwizardApplication extends Application<DropwizardConfiguration> 
                     final Environment environment) {
         // TODO: implement application
 
-//        final JdbiFactory factory = new JdbiFactory();
-//        final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "mysql");
+        final JdbiFactory factory = new JdbiFactory();
+        final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "mysql");
+        final EmployeeJDBIDAO employeeJDBIDAO = jdbi.onDemand(EmployeeJDBIDAO.class);
+        final UserJDBIDAO userJDBIDAO = jdbi.onDemand(UserJDBIDAO.class);
+
+
         final EmployeeDAO employeeDAO = new EmployeeDAO(hibernate.getSessionFactory());
         final UserDAO userDAO = new UserDAO(hibernate.getSessionFactory());
 
         environment.jersey().register(new HelloWorldResource());
         environment.jersey().register(new UserResource(userDAO));
-        environment.jersey().register(new EmployeeResource(employeeDAO, userDAO));
+        environment.jersey().register(new EmployeeResource(employeeDAO, userDAO, employeeJDBIDAO ));
 
         environment.jersey().register(new AuthDynamicFeature(
                 new BasicCredentialAuthFilter.Builder<AuthenticatedUser>()
-                        .setAuthenticator(new DropWizardAuthenticator(userDAO))
+                        .setAuthenticator(new DropWizardAuthenticator(userDAO, userJDBIDAO))
                         .setAuthorizer(new DropWizardAuthorizer())
                         .setRealm("SUPER SECRET STUFF")
                         .buildAuthFilter()));

@@ -33,4 +33,9 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    public User(String email, String role, String password) {
+        this.email = email;
+        this.role = role;
+        this.password = password;
+    }
 }

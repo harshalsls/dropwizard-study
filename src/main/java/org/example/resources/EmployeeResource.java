@@ -13,6 +13,7 @@ import org.example.core.Employee;
 import org.example.core.User;
 import org.example.db.EmployeeDAO;
 import org.example.db.UserDAO;
+import org.example.db.jdbi.EmployeeJDBIDAO;
 
 @Path("/employee")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,14 +22,16 @@ public class EmployeeResource {
 
     private final EmployeeDAO employeeDAO;
     private final UserDAO userDAO;
+    private final EmployeeJDBIDAO employeeJDBIDAO;
 
 
     @RolesAllowed("ADMIN")
     @POST
     @UnitOfWork
-    public Employee addEmployee(@Auth AuthenticatedUser user, Employee employee) {
+    public void addEmployee(@Auth AuthenticatedUser user, Employee employee) {
 //        User user1 = userDAO.findByEmail(user.getEmail());
         System.out.println(String.format("Hey there, %s. It looks like you are an admin. ", user.getEmail()));
-       return employeeDAO.create(employee);
+//       return employeeDAO.create(employee);
+        employeeJDBIDAO.insertEmployee(employee.getName(), employee.getCity(), employee.getMobileNumber());
     }
 }
