@@ -1,12 +1,12 @@
 package org.example;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.core.Configuration;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.jobs.JobConfiguration;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import io.dropwizard.db.DataSourceFactory;
 
-public class DropwizardConfiguration extends Configuration {
+public class DropwizardConfiguration extends JobConfiguration {
     // TODO: implement service configuration
 
     private static final String DATABASE = "database";

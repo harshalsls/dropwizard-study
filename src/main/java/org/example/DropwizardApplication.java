@@ -9,9 +9,11 @@ import io.dropwizard.core.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.jdbi3.JdbiFactory;
+import io.dropwizard.jobs.Job;
+import io.dropwizard.jobs.JobsBundle;
 import io.dropwizard.migrations.MigrationsBundle;
-import org.example.auth.DropWizardAuthorizer;
 import org.example.auth.DropWizardAuthenticator;
+import org.example.auth.DropWizardAuthorizer;
 import org.example.core.AuthenticatedUser;
 import org.example.core.Employee;
 import org.example.core.User;
@@ -19,6 +21,7 @@ import org.example.db.EmployeeDAO;
 import org.example.db.UserDAO;
 import org.example.db.jdbi.EmployeeJDBIDAO;
 import org.example.db.jdbi.UserJDBIDAO;
+import org.example.jobs.DailyJob;
 import org.example.resources.EmployeeResource;
 import org.example.resources.HelloWorldResource;
 import org.example.resources.UserResource;
@@ -61,6 +64,8 @@ public class DropwizardApplication extends Application<DropwizardConfiguration> 
         });
 
        // bootstrap.addBundle(hibernateEmployee);
+        Job dailyJob = new DailyJob();
+        bootstrap.addBundle(new JobsBundle(dailyJob));
         bootstrap.addBundle(hibernate);
     }
 
