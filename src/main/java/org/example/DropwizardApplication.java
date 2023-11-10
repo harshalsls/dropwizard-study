@@ -45,7 +45,6 @@ public class DropwizardApplication extends Application<DropwizardConfiguration> 
 //            return configuration.getDataSourceFactory();
 //        }
 //    };
-
     private final HibernateBundle<DropwizardConfiguration> hibernate = new HibernateBundle<DropwizardConfiguration>(User.class, Employee.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(DropwizardConfiguration configuration) {
