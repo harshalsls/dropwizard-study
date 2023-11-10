@@ -33,7 +33,6 @@ public class DropwizardApplication extends Application<DropwizardConfiguration> 
     public static void main(final String[] args) throws Exception {
         new DropwizardApplication().run(args);
     }
-
     @Override
     public String getName() {
         return "Dropwizard";
